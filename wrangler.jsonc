@@ -1,0 +1,55 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "orange-boards",
+  "main": "./app/entry.server.ts",
+  "compatibility_date": "2024-12-05",
+  "compatibility_flags": ["nodejs_compat"],
+  // Where the static asses built by Vite will be served out of.
+  "assets": {
+    "directory": "./dist/client"
+  },
+  // Workers Logs
+  // Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
+  // Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
+  "observability": {
+    "enabled": true
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "Draw",
+        "name": "Draw"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["Draw"]
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "USERS_DATABASE",
+      "migrations_dir": "./drizzle",
+      "database_name": "orange-boards",
+      "database_id": "e26869c5-2f3c-4a1b-918d-afdf52cf9fcd"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "images",
+      "binding": "images"
+    }
+  ],
+  "browser": {
+    "binding": "screenshotBrowser"
+  },
+  "workflows": [
+    {
+      "class_name": "ScreenshotWorkflow",
+      "name": "ScreenshotWorkflow",
+      "binding": "ScreenshotWorkflow"
+    }
+  ]
+}
